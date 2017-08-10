@@ -25,23 +25,39 @@ export class Command {
 
         var parts = this.executableCommand.split(/=| /);
 
-        this.executableCommand = this.executableCommand.replace("-chain=", "");
+        var chainPart = this.GetWholeParam("chain");
+        this.executableCommand = this.executableCommand.replace(chainPart + "=", "");
         {
-            var chainIndex = parts.indexOf("-chain");
+            var chainIndex = parts.indexOf(chainPart);
             if (chainIndex >= 0) {
                 this.nextCommand = parts[chainIndex + 1];
                 this.executableCommand = this.executableCommand.replace(parts[chainIndex + 1], "");
             }
         }
 
-        this.executableCommand = this.executableCommand.replace("-cwd=", "");
+        var cwdPart = this.GetWholeParam("cwd");
+        this.executableCommand = this.executableCommand.replace(cwdPart + "=", "");
         {
-            var cwdIndex = parts.indexOf("-cwd");
+            var cwdIndex = parts.indexOf(cwdPart);
             if (cwdIndex >= 0) {
                 this.cwdRaw = parts[cwdIndex + 1];
                 this.executableCommand = this.executableCommand.replace(parts[cwdIndex + 1], "");
             } else this.cwdRaw = parameters.GetValueForCommandArg(["", "workDir"]);
         }
+    }
+
+    // Used to prefix an argument with as many dashes as needed to be like the one given in the command.
+    // For example, for command "pull --cwd=xyz", GetWholeParam("cwd") return "--cwd".
+    // Returns same string if neither the given string, nor any extension of it are found in the command.
+    private GetWholeParam(param: string): string {
+        var ret = param;
+        var curr = param;
+        for (var i = 0; i < 10; ++i) {
+            curr = "-" + curr;
+            if (this.executableCommand.indexOf(curr) >= 0)
+                ret = curr;
+        }
+        return ret;
     }
 
     private static GetDomainAndValue(part: string): string[] {

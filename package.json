@@ -1,0 +1,24 @@
+{
+  "name": "awesome-builder",
+  "version": "1.0.0",
+  "main": "./build/main.js",
+  "author": "Damir Ferizovic",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^8.0.13",
+    "nexe": "^1.1.3"
+  },
+  "dependencies": {
+    "@types/argparse": "^1.0.30",
+    "@types/colors": "^1.1.3",
+    "@types/extend": "^2.0.30",
+    "@types/lodash": "^4.14.71",
+    "argparse": "^1.0.9",
+    "child_process": "^1.0.2",
+    "colors": "^1.1.2",
+    "extend": "^3.0.1",
+    "lodash": "^4.17.4",
+    "path": "^0.12.7",
+    "util": "^0.10.3"
+  }
+}

@@ -86,7 +86,7 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
         console.log(colors.red(`stderr:`) + `${data}`);
     });
 
-    child.on('close', (code) => {
+    child.on('exit', (code) => {
         console.log(`child process exited with code ${code}`);
         if (command.GetNextCommand()) {
             console.log('-------------');

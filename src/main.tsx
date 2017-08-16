@@ -7,6 +7,7 @@ import { Parameters } from "./Parameters";
 import { Command } from "./Command";
 import { FormattedOutput, GetDirectoriesWithConfig } from "./Utils";
 import * as extend from "extend";
+var spawnargs = require('spawn-args');
 
 let spawnSync = child_process.spawnSync;
 let spawn = child_process.spawn;
@@ -71,8 +72,22 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
     console.log(colors.cyan(`Parsed-command-content: ${command.GetExecutableCommand()}`));
     console.log(colors.cyan(`Execute in directory:   ${command.GetWorkingDir()}`));
 
-    const child = exec(command.GetExecutableCommand(), {cwd: command.GetWorkingDir()}, (error, stdout, stderr) => {
-        FormattedOutput(error, stdout, stderr);
+    var execCmd = command.GetExecutableCommand();
+    var cmdpart = execCmd.substr(0, execCmd.indexOf(' '));
+    var argpart = execCmd.substr(execCmd.indexOf(' '));
+
+    const child = spawn(cmdpart, spawnargs(argpart), {cwd: command.GetWorkingDir()});
+
+    child.stdout.on('data', (data) => {
+        console.log(colors.green(`stdout:`) + `${data}`);
+    });
+
+    child.stderr.on('data', (data) => {
+        console.log(colors.red(`stderr:`) + `${data}`);
+    });
+
+    child.on('close', (code) => {
+        console.log(`child process exited with code ${code}`);
         if (command.GetNextCommand()) {
             console.log('-------------');
             ExecuteCommand(parameters.GetExecutionCommandForCommand(command.GetNextCommand()));

@@ -76,7 +76,7 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
     var cmdpart = execCmd.substr(0, execCmd.indexOf(' '));
     var argpart = execCmd.substr(execCmd.indexOf(' '));
 
-    const child = spawn(cmdpart, spawnargs(argpart), {cwd: command.GetWorkingDir()});
+    const child = spawn(cmdpart, spawnargs(argpart), {cwd: command.GetWorkingDir(), stdio: ['inherit', 'pipe', 'pipe']});
 
     child.stdout.on('data', (data) => {
         console.log(colors.green(`stdout:`) + `${data}`);
@@ -86,8 +86,8 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
         console.log(colors.red(`stderr:`) + `${data}`);
     });
 
-    child.on('exit', (code) => {
-        console.log(`child process exited with code ${code}`);
+    child.on('close', (code) => {
+        console.log(`child process exited with code ${code}, next cmd: ${command.GetNextCommand}`);
         if (command.GetNextCommand()) {
             console.log('-------------');
             ExecuteCommand(parameters.GetExecutionCommandForCommand(command.GetNextCommand()));

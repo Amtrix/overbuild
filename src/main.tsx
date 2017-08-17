@@ -77,9 +77,9 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
     var argpart = execCmd.substr(execCmd.indexOf(' '));
  
     const child = spawn(cmdpart, spawnargs(argpart), {cwd: command.GetWorkingDir(), stdio: 'inherit'});
-
+ 
     child.on('close', (code) => {
-        console.log(`child process exited with code ${code}, next cmd: ${command.GetNextCommand()}`);
+        console.log(`child  process exited with code ${code}, next cmd: ${command.GetNextCommand()}`);
         if (command.GetNextCommand()) {
             console.log('-------------');
             ExecuteCommand(parameters.GetExecutionCommandForCommand(command.GetNextCommand()));

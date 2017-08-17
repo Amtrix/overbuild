@@ -78,14 +78,6 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
 
     const child = spawn(cmdpart, spawnargs(argpart), {cwd: command.GetWorkingDir(), stdio: 'inherit'});
 
-   // child.stdout.on('data', (data) => {
-    //    console.log(colors.green(`stdout:`) + `${data}`);
-   // });
-
-   // child.stderr.on('data', (data) => {
-   //     console.log(colors.red(`stderr:`) + `${data}`);
-  //  });
-
     child.on('close', (code) => {
         console.log(`child process exited with code ${code}, next cmd: ${command.GetNextCommand()}`);
         if (command.GetNextCommand()) {

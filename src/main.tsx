@@ -80,7 +80,11 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
     args.array.forEach((arg: string) => {
         if (arg[0] == "\'" && arg[arg.length-1] == "\'") noquoteargs.push(arg.substr(1, arg.length - 2));
         else if (arg[0] == "\"" && arg[arg.length-1] == "\"") noquoteargs.push(arg.substr(1, arg.length - 2));
+        else noquoteargs.push(arg);
     });
+
+    console.log(cmdpart);
+    console.log(noquoteargs);
  
     const child = spawn(cmdpart, noquoteargs, {cwd: command.GetWorkingDir(), stdio: 'inherit'});
 

@@ -77,7 +77,7 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
     var argpart = execCmd.substr(execCmd.indexOf(' '));
     var args = spawnargs(argpart);
     var noquoteargs: string[] = [];
-    args.array.forEach((arg: string) => {
+    args.forEach((arg: string) => {
         if (arg[0] == "\'" && arg[arg.length-1] == "\'") noquoteargs.push(arg.substr(1, arg.length - 2));
         else if (arg[0] == "\"" && arg[arg.length-1] == "\"") noquoteargs.push(arg.substr(1, arg.length - 2));
         else noquoteargs.push(arg);
@@ -91,7 +91,7 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
     child.on('close', (code) => {
         console.log(`child process exited with code ${code}, next cmd: ${command.GetNextCommand()}`);
         if (command.GetNextCommand()) {
-            console.log('--------------');
+            console.log('---------------');
             ExecuteCommand(parameters.GetExecutionCommandForCommand(command.GetNextCommand()));
         }
     });

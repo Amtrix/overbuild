@@ -67,11 +67,6 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
     if (!commandData) return;
     
     var command = new Command(commandData, parameters);
-    
-    console.log(colors.cyan(`Command-content:        ${commandData.result}`));
-    console.log(colors.cyan(`Parsed-command-content: ${command.GetExecutableCommand()}`));
-    console.log(colors.cyan(`Execute in directory:   ${command.GetWorkingDir()}`));
-
     var execCmd = command.GetExecutableCommand();
     var cmdpart = execCmd.substr(0, execCmd.indexOf(' '));
     var argpart = execCmd.substr(execCmd.indexOf(' '));
@@ -83,8 +78,10 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
         else noquoteargs.push(arg);
     });
 
-    console.log(cmdpart);
-    console.log(noquoteargs);
+    console.log(colors.cyan(`Command-content:        ${commandData.result}`));
+    console.log(colors.cyan(`Parsed-command-content: ${command.GetExecutableCommand()}`));
+    console.log(colors.cyan(`Execute in directory:   ${command.GetWorkingDir()}`));
+    console.log(colors.cyan(`Parsed args:            ${noquoteargs}`));
  
     const child = spawn(cmdpart, noquoteargs, {cwd: command.GetWorkingDir(), stdio: 'inherit'});
 

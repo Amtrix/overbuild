@@ -75,8 +75,14 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
     var execCmd = command.GetExecutableCommand();
     var cmdpart = execCmd.substr(0, execCmd.indexOf(' '));
     var argpart = execCmd.substr(execCmd.indexOf(' '));
+    var args = spawnargs(argpart);
+    var noquoteargs: string[] = [];
+    args.array.forEach((arg: string) => {
+        if (arg[0] == "\'" && arg[arg.length-1] == "\'") noquoteargs.push(arg.substr(1, arg.length - 2));
+        else if (arg[0] == "\"" && arg[arg.length-1] == "\"") noquoteargs.push(arg.substr(1, arg.length - 2));
+    });
  
-    const child = spawn(cmdpart, spawnargs(argpart), {cwd: command.GetWorkingDir(), stdio: 'inherit'});
+    const child = spawn(cmdpart, noquoteargs, {cwd: command.GetWorkingDir(), stdio: 'inherit'});
 
     child.on('close', (code) => {
         console.log(`child process exited with code ${code}, next cmd: ${command.GetNextCommand()}`);

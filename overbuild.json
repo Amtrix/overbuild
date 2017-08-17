@@ -7,7 +7,7 @@
         "help": "node build/main.js --help -cwd=${thisDir}",
         "build-and-help": "${args.commands.build} && ${args.commands.help}",
         "git-add-commit-push": "git add --all -chain=commitx",
-        "git-commit-push": "git commit -am '${args.message}' -chain=pushx",
+        "git-commit-push": "git commit -am ${args.message} -chain=pushx",
         "git-push": "git push origin master"
     }
 }

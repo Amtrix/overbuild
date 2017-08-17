@@ -75,7 +75,7 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
     var execCmd = command.GetExecutableCommand();
     var cmdpart = execCmd.substr(0, execCmd.indexOf(' '));
     var argpart = execCmd.substr(execCmd.indexOf(' '));
-
+ 
     const child = spawn(cmdpart, spawnargs(argpart), {cwd: command.GetWorkingDir(), stdio: 'inherit'});
 
     child.on('close', (code) => {

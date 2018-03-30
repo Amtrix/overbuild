@@ -2,7 +2,7 @@
     "project": "overbuild",
     "commands":
     {
-        "windows-add-to-path": "setx path \"%path%;${thisDir}\\build\\\"",
+        "windows-add-to-path": "setx path  %path%;${thisDir}\\build\\",
         "build": "tsc --project src -cwd=${thisDir}",
         "run": "node build/main.js --help -cwd=${thisDir}",
         "help": "node build/main.js --help -cwd=${thisDir}",

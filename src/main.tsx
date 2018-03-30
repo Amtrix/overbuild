@@ -77,9 +77,9 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
         argpart = execCmd.substr(cmdpart.length + 2);
     }
     
-    console.log(argpart);
     var args = spawnargs(argpart);
     var noquoteargs: string[] = [];
+    
     args.forEach((arg: string) => {
         if (arg[0] == "\'" && arg[arg.length-1] == "\'") noquoteargs.push(arg.substr(1, arg.length - 2));
         else if (arg[0] == "\"" && arg[arg.length-1] == "\"") noquoteargs.push(arg.substr(1, arg.length - 2));
@@ -109,6 +109,7 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
 
 process.on('uncaughtException', function (err) {
     console.error(err);
+    console.error("Make sure 'To be executed' and 'Execute in directory' are correct.")
   });
 
 ExecuteCommand(commandData);

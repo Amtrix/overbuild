@@ -8,6 +8,7 @@
         "build-and-help": "${args.commands.build} && ${args.commands.help}",
         "git-add-commit-push": "git add --all -chain=commitx",
         "git-commit-push": "git commit -am ${args.message} -chain=pushx",
-        "git-push": "git push origin master"
+        "git-push": "git push origin master",
+        "test": "\"/mnt/d/bin/Epic Games/UE_4.19/Engine/Binaries/DotNET/UnrealBuildTool.exe\""
     }
 }

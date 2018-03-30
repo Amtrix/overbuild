@@ -20,6 +20,8 @@ export function FormattedOutput(error: any, stdout: any, stderr: any)
         console.log("No output.");
 }
 
+// Returns all directories(!) in which overbuild.json is found, starting from process.cwd()
+// and going upwards in the tree structure.
 export function GetDirectoriesWithConfig(): string[]
 {
     var curr = process.cwd();

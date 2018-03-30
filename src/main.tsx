@@ -7,12 +7,13 @@ import { Parameters } from "./Parameters";
 import { Command } from "./Command";
 import { FormattedOutput, GetDirectoriesWithConfig } from "./Utils";
 import * as extend from "extend";
-var spawnargs = require('spawn-args');
 
+var spawnargs = require('spawn-args');
 let spawnSync = child_process.spawnSync;
 let spawn = child_process.spawn;
 let exec = child_process.exec;
 let ArgumentParser = ArgumentParserNamespace.ArgumentParser;
+
 let configfile = path.join(process.cwd(), "overbuild.json");
 
 var args, unknownArgs: any;
@@ -69,7 +70,9 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
     var command = new Command(commandData, parameters);
     var execCmd = command.GetExecutableCommand();
     var cmdpart = execCmd.substr(0, execCmd.indexOf(' '));
-    var argpart = execCmd.substr(execCmd.indexOf(' '));
+    // If a command is a path, we use double quotes to possibly identify it.
+    if (execCmd[0] == "\"") cmdpart = execCmd.substr(1, execCmd.substr(1).indexOf("\""));
+    var argpart = execCmd.substr(cmdpart.length + 1);
     var args = spawnargs(argpart);
     var noquoteargs: string[] = [];
     args.forEach((arg: string) => {
@@ -78,11 +81,13 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
         else noquoteargs.push(arg);
     });
 
-    console.log(colors.cyan(`Command-content:        ${commandData.result}`));
-    console.log(colors.cyan(`Parsed-command-content: ${command.GetExecutableCommand()}`));
-    console.log(colors.cyan(`Execute in directory:   ${command.GetWorkingDir()}`));
-    console.log(colors.cyan(`Parsed args:            ${noquoteargs}`));
+    console.log(colors.cyan(`Command-content:         ${commandData.result}`));
+    console.log(colors.cyan(`Parsed-command-content:  ${command.GetExecutableCommand()}`));
+    console.log(colors.cyan(`Identified command part: '${cmdpart}'`));
+    console.log(colors.cyan(`Execute in directory:    ${command.GetWorkingDir()}`));
+    console.log(colors.cyan(`Parsed args:             ${noquoteargs}`));
  
+    //try {
     const child = spawn(cmdpart, noquoteargs, {cwd: command.GetWorkingDir(), stdio: 'inherit'});
 
     child.on('close', (code) => {
@@ -92,6 +97,13 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
             ExecuteCommand(parameters.GetExecutionCommandForCommand(command.GetNextCommand()));
         }
     });
+    //} catch (err) {
+    //    console.log(err);
+    //}
 }
+
+process.on('uncaughtException', function (err) {
+    console.error(err);
+  });
 
 ExecuteCommand(commandData);

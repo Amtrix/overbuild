@@ -70,9 +70,14 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
     var command = new Command(commandData, parameters);
     var execCmd = command.GetExecutableCommand();
     var cmdpart = execCmd.substr(0, execCmd.indexOf(' '));
-    // If a command is a path, we use double quotes to possibly identify it.
-    if (execCmd[0] == "\"") cmdpart = execCmd.substr(1, execCmd.substr(1).indexOf("\""));
     var argpart = execCmd.substr(cmdpart.length + 1);
+    // If a command is a path, we use double quotes to possibly identify it.
+    if (execCmd[0] == "\"") {
+        cmdpart = execCmd.substr(1, execCmd.substr(1).indexOf("\""));
+        argpart = execCmd.substr(cmdpart.length + 2);
+    }
+    
+    console.log(argpart);
     var args = spawnargs(argpart);
     var noquoteargs: string[] = [];
     args.forEach((arg: string) => {
@@ -83,11 +88,11 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
 
     console.log(colors.cyan(`Command-content:         ${commandData.result}`));
     console.log(colors.cyan(`Parsed-command-content:  ${command.GetExecutableCommand()}`));
-    console.log(colors.cyan(`Identified command part: '${cmdpart}'`));
+    console.log(colors.cyan(`To be executed:         '${cmdpart}'`));
     console.log(colors.cyan(`Execute in directory:    ${command.GetWorkingDir()}`));
     console.log(colors.cyan(`Parsed args:             ${noquoteargs}`));
  
-    //try {
+   // try {
     const child = spawn(cmdpart, noquoteargs, {cwd: command.GetWorkingDir(), stdio: 'inherit'});
 
     child.on('close', (code) => {
@@ -97,9 +102,9 @@ function ExecuteCommand(commandData: Parameters.QueryResult) {
             ExecuteCommand(parameters.GetExecutionCommandForCommand(command.GetNextCommand()));
         }
     });
-    //} catch (err) {
-    //    console.log(err);
-    //}
+  //  } catch (err) {
+  //      console.log(err);
+  //  }
 }
 
 process.on('uncaughtException', function (err) {

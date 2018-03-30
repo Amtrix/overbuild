@@ -76,8 +76,8 @@ export class Command {
     public GetNextCommand() { return this.nextCommand; }
 
     public GetWorkingDir(): string {
-        var parts = this.cwdRaw.split("/");
-        var finpath = "/";
+        var parts = process.platform == "win32" ? this.cwdRaw.split("\\") :  this.cwdRaw.split("/");
+        var finpath = process.platform == "win32" ? "\\\\?\\" :  "/";
         parts.forEach(part => {
             finpath = path.join(finpath, part);
         });

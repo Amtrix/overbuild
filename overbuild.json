@@ -2,6 +2,7 @@
     "project": "overbuild",
     "commands":
     {
+        "windows-add-to-path": "setx path \"%path%;${thisDir}\\build\\\"",
         "build": "tsc --project src -cwd=${thisDir}",
         "run": "node build/main.js --help -cwd=${thisDir}",
         "help": "node build/main.js --help -cwd=${thisDir}",
@@ -9,6 +10,7 @@
         "git-add-commit-push": "git add --all -chain=commitx",
         "git-commit-push": "git commit -am ${args.message} -chain=pushx",
         "git-push": "git push origin master",
-        "test": "\"/mnt/d/bin/Epic Games/UE_4.19/Engine/Binaries/DotNET/UnrealBuildTool.exe\""
+        "test": "\"/mnt/d/bin/Epic Games/UE_4.19/Engine/Binaries/DotNET/UnrealBuildTool.exe\"",
+        "win-test": "\"D:\\bin\\Epic Games\\UE_4.19\\Engine\\Binaries\\DotNET\\UnrealBuildTool.exe\""
     }
 }
